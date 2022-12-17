@@ -1,8 +1,7 @@
 package command
 
 import (
-	"fmt"
-
+	"github.com/rocketblend/rocketblend-collector/pkg/collector"
 	"github.com/spf13/cobra"
 )
 
@@ -14,8 +13,8 @@ func NewPullCommand(srv *Service) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			collection := srv.collector.GetStableCollection()
 
-			for _, build := range collection.Builds {
-				fmt.Println(build)
+			for _, build := range collection.FilterByPlatform(collector.Platforms[:]) {
+				srv.driver.Write("builds", build.Version, build)
 			}
 		},
 	}

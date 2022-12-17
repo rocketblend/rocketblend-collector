@@ -25,10 +25,10 @@ func Load() (config *Config, err error) {
 
 	viper.AutomaticEnv()
 
-	err = viper.ReadInConfig()
-	if err != nil {
-		return nil, err
-	}
+	// err = viper.ReadInConfig()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	err = viper.Unmarshal(&config)
 	return config, err

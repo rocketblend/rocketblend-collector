@@ -61,7 +61,7 @@ func ParsePlatform(name string) string {
 		return Platforms[3]
 	}
 
-	return ""
+	return "unknown"
 }
 
 func GenerateHash(text string) string {

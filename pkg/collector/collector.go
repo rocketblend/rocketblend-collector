@@ -75,7 +75,8 @@ func (c *Collector) GetStableCollection() *collection.Collection {
 			if e.Request.Depth == 1 {
 				e.Request.Visit(e.Request.AbsoluteURL(link))
 			} else {
-				builds.Add(&collection.Build{
+				now := time.Now()
+				err := builds.Add(&collection.Build{
 					Name:    strings.TrimSuffix(link, filepath.Ext(link)),
 					Version: FindVerisonNumberStr(link),
 					Tag:     "stable",
@@ -84,12 +85,15 @@ func (c *Collector) GetStableCollection() *collection.Collection {
 							Platform:    ParsePlatform(link),
 							FileName:    link,
 							DownloadUrl: e.Request.AbsoluteURL(link),
-							CreatedAt:   time.Now(),
+							CreatedAt:   now,
 						},
 					},
-					CreatedAt: time.Now(),
-					UpdatedAt: time.Now(),
+					CreatedAt: now,
+					UpdatedAt: now,
 				})
+				if err != nil {
+					fmt.Println("Failed to add build to collection:", err)
+				}
 			}
 		}
 	})

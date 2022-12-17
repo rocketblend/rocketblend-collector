@@ -25,3 +25,6 @@
 
 # Air build temp directory
 tmp/
+
+# Temp data store
+data/
