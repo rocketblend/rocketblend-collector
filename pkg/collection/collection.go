@@ -35,8 +35,8 @@ func (c *Collection) GetAll() map[string]Build {
 	return c.builds
 }
 
-func (c *Collection) FilterByPlatform(platforms []string) map[string]Build {
-	filteredBuilds := make(map[string]Build)
+func (c *Collection) FilterSourcesByPlatform(platforms []string) map[string]Build {
+	builds := make(map[string]Build)
 	for _, build := range c.builds {
 		var filteredSources []Source
 		for _, source := range build.Sources {
@@ -45,9 +45,9 @@ func (c *Collection) FilterByPlatform(platforms []string) map[string]Build {
 			}
 		}
 		build.Sources = filteredSources
-		filteredBuilds[build.Version] = build
+		builds[build.Version] = build
 	}
-	return filteredBuilds
+	return builds
 }
 
 func contains(s []string, e string) bool {

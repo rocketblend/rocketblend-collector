@@ -13,7 +13,7 @@ func NewPullCommand(srv *Service) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			collection := srv.collector.GetStableCollection()
 
-			for _, build := range collection.FilterByPlatform(collector.Platforms[:]) {
+			for _, build := range collection.FilterSourcesByPlatform(collector.Platforms[:]) {
 				srv.driver.Write("builds", build.Version, build)
 			}
 		},
