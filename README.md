@@ -6,3 +6,24 @@
 [![GitHub](https://img.shields.io/github/license/rocketblend/rocketblend-collector)](https://github.com/rocketblend/rocketblend-collector/blob/master/LICENSE)
 
 CLI tool for collecting [Blender](https://www.blender.org/) build information for use with use with [RocketBlend](https://github.com/rocketblend/rocketblend)
+
+## Example config
+
+```yaml
+library: github.com/rocketblend/official-library
+collections:
+    - collection:
+        name: Blender
+        description: Offical builds
+        includes:
+            - stable
+        platforms:
+            - linux
+            - windows
+            - macos
+    - collection:
+        name: Rocketblend
+        description: RocketBlend builds
+        packages:
+            - github.com/rocketblend/official-library/packages/rocketblend/0.1.0
+```
