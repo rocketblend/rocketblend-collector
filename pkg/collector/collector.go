@@ -12,6 +12,7 @@ import (
 	"github.com/corpix/uarand"
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/proxy"
+	"github.com/rocketblend/rocketblend-collector/pkg/collection"
 )
 
 const (
@@ -48,8 +49,8 @@ func New(config *Config) *Collector {
 	}
 }
 
-func (c *Collector) GetStableBuilds() []Build {
-	builds := []Build{}
+func (c *Collector) GetStableCollection() *collection.Collection {
+	builds := collection.New()
 
 	// TODO: Move collector setup to a separate function/service.
 	col := colly.NewCollector(
@@ -74,18 +75,21 @@ func (c *Collector) GetStableBuilds() []Build {
 			if e.Request.Depth == 1 {
 				e.Request.Visit(e.Request.AbsoluteURL(link))
 			} else {
-				platform := ParsePlatform(link)
-				if platform != "" {
-					temp := Build{}
-					temp.Platform = platform
-					temp.Version = FindVerisonNumberStr(link)
-					temp.DownloadUrl = e.Request.AbsoluteURL(link)
-					temp.Name = strings.TrimSuffix(link, filepath.Ext(link))
-					temp.Tag = "stable"
-					temp.Hash = GenerateHash(temp.DownloadUrl)
-					temp.CrawledAt = time.Now()
-					builds = append(builds, temp)
-				}
+				builds.Add(&collection.Build{
+					Name:    strings.TrimSuffix(link, filepath.Ext(link)),
+					Version: FindVerisonNumberStr(link),
+					Tag:     "stable",
+					Sources: []collection.Source{
+						{
+							Platform:    ParsePlatform(link),
+							FileName:    link,
+							DownloadUrl: e.Request.AbsoluteURL(link),
+							CreatedAt:   time.Now(),
+						},
+					},
+					CreatedAt: time.Now(),
+					UpdatedAt: time.Now(),
+				})
 			}
 		}
 	})

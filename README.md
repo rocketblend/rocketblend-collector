@@ -11,6 +11,11 @@ CLI tool for collecting [Blender](https://www.blender.org/) build information fo
 
 ```yaml
 library: github.com/rocketblend/official-library
+collector:
+    proxy: https://proxy.blender.org
+    agent: random
+    parallelism: 2
+    delay: 2s
 collections:
     - collection:
         name: Blender
