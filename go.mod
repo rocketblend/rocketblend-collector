@@ -6,6 +6,7 @@ require (
 	github.com/corpix/uarand v0.2.0
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/gocolly/colly/v2 v2.1.0
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/rocketblend/rocketblend v0.2.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
@@ -28,7 +29,6 @@ require (
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
