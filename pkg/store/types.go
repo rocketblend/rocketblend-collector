@@ -1,10 +1,14 @@
 package store
 
-import "time"
+import (
+	"time"
+
+	"github.com/rocketblend/rocketblend/pkg/core/runtime"
+)
 
 type (
 	Source struct {
-		Platform    string
+		Platform    runtime.Platform
 		FileName    string
 		DownloadUrl string
 		CreatedAt   time.Time

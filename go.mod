@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/corpix/uarand v0.2.0
 	github.com/gocolly/colly/v2 v2.1.0
+	github.com/rocketblend/rocketblend v0.2.0
 	github.com/rocketblend/scribble v1.1.0
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0

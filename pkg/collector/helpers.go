@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/rocketblend/rocketblend/pkg/core/runtime"
 )
 
 const (
@@ -38,16 +40,16 @@ func ParseMajorMinorVersionNumber(input string) (float32, error) {
 	return float32(value), nil
 }
 
-func ParsePlatform(name string) string {
+func ParsePlatform(name string) runtime.Platform {
 	name = strings.ToLower(name)
 	match, _ := regexp.MatchString(WindowsPlatformRegex, name)
 	if match {
-		return Platforms[0]
+		return runtime.Windows
 	}
 
 	match, _ = regexp.MatchString(LinuxPlatformRegex, name)
 	if match {
-		return Platforms[1]
+		return runtime.Linux
 	}
 
 	match, _ = regexp.MatchString(MacPlatformRegex, name)
@@ -55,13 +57,13 @@ func ParsePlatform(name string) string {
 		// regexp packages doesn't support look-ahead/look-behind
 		IsArm, _ := regexp.MatchString(ArmMacPlatformRegex, name)
 		if IsArm {
-			return Platforms[2]
+			return runtime.DarwinArm
 		}
 
-		return Platforms[3]
+		return runtime.DarwinAmd
 	}
 
-	return "unknown"
+	return runtime.Undefined
 }
 
 func GenerateHash(text string) string {

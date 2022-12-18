@@ -34,29 +34,3 @@ func (s *Store) Add(build *Build) error {
 func (s *Store) GetAll() map[string]Build {
 	return s.builds
 }
-
-func (s *Store) FilterSourcesByPlatform(platforms []string) map[string]Build {
-	builds := make(map[string]Build)
-	for _, build := range s.builds {
-		var filteredSources []Source
-		for _, source := range build.Sources {
-			if contains(platforms, source.Platform) {
-				filteredSources = append(filteredSources, source)
-			}
-		}
-		if len(filteredSources) > 0 {
-			build.Sources = filteredSources
-			builds[build.Version] = build
-		}
-	}
-	return builds
-}
-
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
