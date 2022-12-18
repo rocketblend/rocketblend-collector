@@ -1,60 +1,23 @@
 package collection
 
-import (
-	"sync"
+import "github.com/rocketblend/rocketblend-collector/pkg/store"
+
+type (
+	Collection struct {
+		name      string
+		platforms []string
+		store     *store.Store
+	}
 )
 
-type Collection struct {
-	mu     sync.Mutex
-	builds map[string]Build
-}
-
-func New() *Collection {
+func New(name string, platforms []string, store *store.Store) *Collection {
 	return &Collection{
-		builds: make(map[string]Build),
+		name:      name,
+		platforms: platforms,
+		store:     store,
 	}
 }
 
-func (c *Collection) Add(build *Build) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	existing, ok := c.builds[build.Version]
-	if ok {
-		existing.Sources = append(existing.Sources, build.Sources...)
-		existing.UpdatedAt = build.UpdatedAt
-		c.builds[build.Version] = existing
-		return nil
-	}
-
-	c.builds[build.Version] = *build
-	return nil
-}
-
-func (c *Collection) GetAll() map[string]Build {
-	return c.builds
-}
-
-func (c *Collection) FilterSourcesByPlatform(platforms []string) map[string]Build {
-	builds := make(map[string]Build)
-	for _, build := range c.builds {
-		var filteredSources []Source
-		for _, source := range build.Sources {
-			if contains(platforms, source.Platform) {
-				filteredSources = append(filteredSources, source)
-			}
-		}
-		build.Sources = filteredSources
-		builds[build.Version] = build
-	}
-	return builds
-}
-
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
+func (c *Collection) ToOutput() string {
+	return c.name
 }
