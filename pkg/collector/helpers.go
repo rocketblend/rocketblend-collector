@@ -19,8 +19,6 @@ const (
 	VersionNumberRegex   string = "[0-9]+([.][0-9]+)"
 )
 
-var Platforms = [4]string{"windows", "linux", "macos arm", "macos intel"}
-
 func FindVerisonNumberStr(input string) string {
 	// Gets the full version number from the input string.
 	r, _ := regexp.Compile(fmt.Sprintf("(%s+)", VersionNumberRegex))
