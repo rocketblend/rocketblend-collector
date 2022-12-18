@@ -3,7 +3,6 @@ package collector
 import (
 	"fmt"
 	"log"
-	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -32,15 +31,27 @@ type Collector struct {
 	conf *Config
 }
 
-func DefaultConfig() *Config {
-	// TODO: Handle missing config stuff correctly.
-	return &Config{
-		Proxy:           fmt.Sprintf("https://%s:%s@%s", os.Getenv("PROXY_USER"), os.Getenv("PROXY_PASS"), os.Getenv("PROXY_DOMAIN")),
-		UserAgent:       uarand.GetRandom(),
-		Parallelism:     2,
-		RandomDelay:     time.Second * 5,
-		OldestSupported: 2.79,
+func NewConfig(proxyUrl string, agent string, parallelism int, delay string) (*Config, error) {
+	duration, err := time.ParseDuration(delay)
+	if err != nil {
+		return nil, err
 	}
+
+	if agent == "random" {
+		agent = uarand.GetRandom()
+	}
+
+	if proxyUrl != "" {
+		fmt.Printf("using proxy: %s\n", CensorText(proxyUrl, "#", 20))
+	}
+
+	return &Config{
+		Proxy:           proxyUrl,
+		UserAgent:       agent,
+		Parallelism:     parallelism,
+		RandomDelay:     duration,
+		OldestSupported: 2.79,
+	}, nil
 }
 
 func New(config *Config) *Collector {

@@ -14,9 +14,12 @@ func Execute() error {
 		return fmt.Errorf("failed to load config: %w", err)
 	}
 
-	c := collector.DefaultConfig()
-	collector := collector.New(c)
+	c, err := collector.NewConfig(config.Collector.Proxy, config.Collector.Agent, config.Collector.Parallelism, config.Collector.Delay)
+	if err != nil {
+		return fmt.Errorf("failed to create collector config: %w", err)
+	}
 
+	collector := collector.New(c)
 	srv := command.NewService(config, collector)
 
 	rootCmd := command.NewCommand(srv)

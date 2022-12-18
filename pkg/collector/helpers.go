@@ -70,3 +70,13 @@ func GenerateHash(text string) string {
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])
 }
+
+func CensorText(text string, char string, limit int) string {
+	// Check if the limit is greater than the length of the input text
+	if limit > len(text) {
+		limit = len(text)
+	}
+
+	// Create a new string with the specified number of characters
+	return strings.Repeat(char, limit)
+}

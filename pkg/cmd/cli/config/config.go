@@ -2,6 +2,7 @@ package config
 
 import (
 	"reflect"
+	"strings"
 
 	"github.com/go-playground/validator"
 	"github.com/mitchellh/mapstructure"
@@ -12,15 +13,22 @@ import (
 type (
 	Collection struct {
 		Name        string             `mapstructure:"name" validate:"required"`
-		Description string             `mapstructure:"description"`
-		Args        string             `mapstructure:"args"`
-		Includes    []string           `mapstructure:"includes"`
+		Description string             `mapstructure:"description" default:""`
+		Args        string             `mapstructure:"args" default:""`
 		Packages    []string           `mapstructure:"packages"`
 		Platforms   []runtime.Platform `mapstructure:"platforms" validate:"required"`
 	}
 
+	Collector struct {
+		Parallelism int    `mapstructure:"parallelism" default:"2"`
+		Delay       string `mapstructure:"delay" default:"5s"`
+		Agent       string `mapstructure:"agent" default:"random"`
+		Proxy       string `mapstructure:"proxy"`
+	}
+
 	Config struct {
 		Library     string       `mapstructure:"library" validate:"required"`
+		Collector   Collector    `mapstructure:"collector"`
 		Collections []Collection `mapstructure:"collections" validate:"required"`
 	}
 )
@@ -48,19 +56,23 @@ func PlatformHookFunc() mapstructure.DecodeHookFuncType {
 }
 
 func Load() (config *Config, err error) {
-	viper.SetConfigType("yaml")      // Set the config type to YAML
-	viper.SetConfigName("collector") // Set the name of the configuration file
+	v := viper.New()
 
-	viper.AddConfigPath(".") // Look for the configuration file in the current
+	v.SetConfigName("collector") // Set the name of the configuration file
+	v.AddConfigPath(".")         // Look for the configuration file in the current
+	v.SetConfigType("yml")       // Set the config type to YAML
 
-	viper.AutomaticEnv()
+	v.AutomaticEnv()
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
-	err = viper.ReadInConfig()
+	v.BindEnv("collector.proxy")
+
+	err = v.ReadInConfig()
 	if err != nil {
 		return nil, err
 	}
 
-	err = viper.Unmarshal(&config, viper.DecodeHook(PlatformHookFunc()))
+	err = v.Unmarshal(&config, viper.DecodeHook(PlatformHookFunc()))
 
 	validate := validator.New()
 	if err := validate.Struct(config); err != nil {

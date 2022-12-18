@@ -29,4 +29,6 @@ tmp/
 # Temp data store
 data/
 
+# Testing
+builds/
 collector.yaml
