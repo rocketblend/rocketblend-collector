@@ -10,6 +10,7 @@ CLI tool for collecting [Blender](https://www.blender.org/) build information an
 ## Example config
 
 ```yaml
+# collector.yaml
 library: github.com/rocketblend/official-library
 collector:
   proxy: http://user:pass@proxy.com
