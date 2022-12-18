@@ -11,7 +11,7 @@ import (
 func NewPullCommand(srv *Service) *cobra.Command {
 	c := &cobra.Command{
 		Use:   "pull",
-		Short: "Pulls release builds into a local json db",
+		Short: "Pulls the current stable builds from the Blender build server and generates build configurations",
 		Long:  ``,
 		Run: func(cmd *cobra.Command, args []string) {
 			wd, _ := os.Getwd()

@@ -41,10 +41,6 @@ func NewConfig(proxyUrl string, agent string, parallelism int, delay string) (*C
 		agent = uarand.GetRandom()
 	}
 
-	if proxyUrl != "" {
-		fmt.Printf("using proxy: %s\n", CensorText(proxyUrl, "#", 20))
-	}
-
 	return &Config{
 		Proxy:           proxyUrl,
 		UserAgent:       agent,
@@ -73,6 +69,7 @@ func (c *Collector) CollectStable() *store.Store {
 
 	// Proxy
 	if c.conf.Proxy != "" {
+		fmt.Printf("using proxy: %s\n", CensorText(c.conf.Proxy, "#", 20))
 		rp, err := proxy.RoundRobinProxySwitcher(c.conf.Proxy)
 		if err != nil {
 			log.Fatal(err)
