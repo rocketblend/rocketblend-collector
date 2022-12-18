@@ -15,7 +15,7 @@ collector:
   proxy: http://user:pass@proxy.com
   agent: random
   parallelism: 2
-  delay: 5s
+  delay: 15s
 collections:
   - name: blender
     platforms:

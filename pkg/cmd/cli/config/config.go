@@ -13,23 +13,23 @@ import (
 type (
 	Collection struct {
 		Name        string             `mapstructure:"name" validate:"required"`
-		Description string             `mapstructure:"description" default:""`
-		Args        string             `mapstructure:"args" default:""`
+		Description string             `mapstructure:"description"`
+		Args        string             `mapstructure:"args"`
 		Packages    []string           `mapstructure:"packages"`
 		Platforms   []runtime.Platform `mapstructure:"platforms" validate:"required"`
 	}
 
 	Collector struct {
-		Parallelism int    `mapstructure:"parallelism" default:"2"`
-		Delay       string `mapstructure:"delay" default:"5s"`
-		Agent       string `mapstructure:"agent" default:"random"`
+		Parallelism int    `mapstructure:"parallelism"`
+		Delay       string `mapstructure:"delay"`
+		Agent       string `mapstructure:"agent"`
 		Proxy       string `mapstructure:"proxy"`
 	}
 
 	Config struct {
-		Library     string       `mapstructure:"library" validate:"required"`
-		Collector   Collector    `mapstructure:"collector"`
-		Collections []Collection `mapstructure:"collections" validate:"required"`
+		Library     string        `mapstructure:"library" validate:"required"`
+		Collector   *Collector    `mapstructure:"collector"`
+		Collections *[]Collection `mapstructure:"collections" validate:"required"`
 	}
 )
 
@@ -57,6 +57,10 @@ func PlatformHookFunc() mapstructure.DecodeHookFuncType {
 
 func Load() (config *Config, err error) {
 	v := viper.New()
+
+	v.SetDefault("collector.parallelism", 1)
+	v.SetDefault("collector.delay", "15s")
+	v.SetDefault("collector.agent", "random")
 
 	v.SetConfigName("collector") // Set the name of the configuration file
 	v.AddConfigPath(".")         // Look for the configuration file in the current
