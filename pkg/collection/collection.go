@@ -1,7 +1,10 @@
 package collection
 
 import (
+	"encoding/json"
+	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
 	"github.com/rocketblend/rocketblend/pkg/core/library"
@@ -28,7 +31,32 @@ func New(reference string, packges []string, platforms []runtime.Platform, args 
 	}
 }
 
-func (c *Collection) Map() (output map[string]library.Build, err error) {
+func (c *Collection) Save(path string) error {
+	builds, err := c.convert()
+	if err != nil {
+		return err
+	}
+
+	for version, build := range builds {
+		buildPath := filepath.Join(path, version)
+		if err := os.MkdirAll(buildPath, 0755); err != nil {
+			return err
+		}
+
+		buildJSON, err := json.Marshal(build)
+		if err != nil {
+			return err
+		}
+
+		if err := os.WriteFile(filepath.Join(buildPath, "build.json"), buildJSON, 0644); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (c *Collection) convert() (output map[string]library.Build, err error) {
 	output = make(map[string]library.Build)
 
 	for _, build := range c.store.GetAll() {
@@ -37,7 +65,7 @@ func (c *Collection) Map() (output map[string]library.Build, err error) {
 			if contains(c.platforms, source.Platform) {
 				sources = append(sources, &library.Source{
 					Platform:   source.Platform,
-					Executable: GetExecutablePath(source.FileName, source.Platform),
+					Executable: path.Join(source.FileName, getRuntimeExecutable(source.Platform)),
 					URL:        source.DownloadUrl,
 				})
 			}
@@ -53,17 +81,4 @@ func (c *Collection) Map() (output map[string]library.Build, err error) {
 	}
 
 	return output, nil
-}
-
-func GetExecutablePath(dir string, platform runtime.Platform) string {
-	return path.Join(dir, platform.String())
-}
-
-func contains(s []runtime.Platform, e runtime.Platform) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
 }
