@@ -30,7 +30,7 @@ collections:
       - github.com/rocketblend/official-library/packages/rocketblend/0.1.0
 ```
 
-You can also use a environment variable to set the proxy url.
+You can also use an environment variable to set the proxy url.
 
 ```bash
 export COLLECTOR_PROXY="http://user:pass@proxy.com"
