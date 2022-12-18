@@ -2,6 +2,7 @@ package collection
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -13,7 +14,8 @@ import (
 
 type (
 	Collection struct {
-		reference string
+		library   string
+		name      string
 		packages  []string
 		platforms []runtime.Platform
 		args      string
@@ -21,14 +23,23 @@ type (
 	}
 )
 
-func New(reference string, packges []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
+func New(library string, name string, packges []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
 	return &Collection{
-		reference: reference,
+		library:   library,
+		name:      name,
 		packages:  packges,
 		args:      args,
 		platforms: platforms,
 		store:     store,
 	}
+}
+
+func (c *Collection) GetReference() string {
+	return path.Join(c.library, c.name, c.store.GetName())
+}
+
+func (c *Collection) GetRoute() string {
+	return path.Join("builds", c.name, c.store.GetName())
 }
 
 func (c *Collection) Save(path string) error {
@@ -38,10 +49,12 @@ func (c *Collection) Save(path string) error {
 	}
 
 	for version, build := range builds {
-		buildPath := filepath.Join(path, version)
+		buildPath := filepath.Join(path, c.GetRoute(), version)
 		if err := os.MkdirAll(buildPath, 0755); err != nil {
 			return err
 		}
+
+		fmt.Println("Saving..", buildPath)
 
 		buildJSON, err := json.Marshal(build)
 		if err != nil {
@@ -72,7 +85,7 @@ func (c *Collection) convert() (output map[string]library.Build, err error) {
 		}
 		if len(sources) > 0 {
 			output[build.Version] = library.Build{
-				Reference: c.reference,
+				Reference: filepath.Join(c.GetReference(), build.Version),
 				Args:      c.args,
 				Packages:  c.packages,
 				Source:    sources,

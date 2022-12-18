@@ -28,3 +28,5 @@ tmp/
 
 # Temp data store
 data/
+
+collector.yaml

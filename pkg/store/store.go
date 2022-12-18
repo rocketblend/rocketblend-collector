@@ -6,13 +6,19 @@ import (
 
 type Store struct {
 	mu     sync.Mutex
+	name   string
 	builds map[string]Build
 }
 
-func New() *Store {
+func New(name string) *Store {
 	return &Store{
+		name:   name,
 		builds: make(map[string]Build),
 	}
+}
+
+func (s *Store) GetName() string {
+	return s.name
 }
 
 func (s *Store) Add(build *Build) error {

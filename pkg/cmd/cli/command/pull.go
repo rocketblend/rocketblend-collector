@@ -1,6 +1,10 @@
 package command
 
 import (
+	"fmt"
+	"os"
+
+	"github.com/rocketblend/rocketblend-collector/pkg/collection"
 	"github.com/spf13/cobra"
 )
 
@@ -10,10 +14,18 @@ func NewPullCommand(srv *Service) *cobra.Command {
 		Short: "Pulls release builds into a local json db",
 		Long:  ``,
 		Run: func(cmd *cobra.Command, args []string) {
-			collection := srv.collector.GetStableCollection()
+			wd, _ := os.Getwd()
 
-			for _, build := range collection.GetAll() {
-				srv.driver.Write("builds", build.Version, build)
+			fmt.Println("pulling builds...")
+			store := srv.collector.CollectStable()
+			fmt.Println("done pulling builds")
+
+			for _, conf := range srv.config.Collections {
+				fmt.Println("saving collection", conf.Name)
+				c := collection.New(srv.config.Library, conf.Name, conf.Packages, conf.Platforms, conf.Args, store)
+				if err := c.Save(wd); err != nil {
+					fmt.Printf("failed to save collection: %s", err)
+				}
 			}
 		},
 	}

@@ -17,7 +17,6 @@ type (
 	Build struct {
 		Name      string
 		Version   string
-		Tag       string
 		Sources   []Source
 		CreatedAt time.Time
 		UpdatedAt time.Time

@@ -49,8 +49,8 @@ func New(config *Config) *Collector {
 	}
 }
 
-func (c *Collector) GetStableCollection() *store.Store {
-	builds := store.New()
+func (c *Collector) CollectStable() *store.Store {
+	builds := store.New("stable")
 
 	// TODO: Move collector setup to a separate function/service.
 	col := colly.NewCollector(
@@ -79,7 +79,6 @@ func (c *Collector) GetStableCollection() *store.Store {
 				err := builds.Add(&store.Build{
 					Name:    strings.TrimSuffix(link, filepath.Ext(link)),
 					Version: FindVerisonNumberStr(link),
-					Tag:     "stable",
 					Sources: []store.Source{
 						{
 							Platform:    ParsePlatform(link),
