@@ -21,10 +21,12 @@ func NewPullCommand(srv *Service) *cobra.Command {
 			fmt.Println("done pulling builds")
 
 			for _, conf := range srv.config.Collections {
-				fmt.Println("saving collection", conf.Name)
+				fmt.Println("saving collection: " + conf.Name)
 				c := collection.New(srv.config.Library, conf.Name, conf.Packages, conf.Platforms, conf.Args, store)
 				if err := c.Save(wd); err != nil {
 					fmt.Printf("failed to save collection: %s", err)
+				} else {
+					fmt.Println("done saving collection")
 				}
 			}
 		},

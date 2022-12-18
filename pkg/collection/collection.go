@@ -2,10 +2,10 @@ package collection
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
 	"github.com/rocketblend/rocketblend/pkg/core/library"
@@ -54,8 +54,6 @@ func (c *Collection) Save(path string) error {
 			return err
 		}
 
-		fmt.Println("Saving..", buildPath)
-
 		buildJSON, err := json.Marshal(build)
 		if err != nil {
 			return err
@@ -78,7 +76,7 @@ func (c *Collection) convert() (output map[string]library.Build, err error) {
 			if contains(c.platforms, source.Platform) {
 				sources = append(sources, &library.Source{
 					Platform:   source.Platform,
-					Executable: path.Join(source.FileName, getRuntimeExecutable(source.Platform)),
+					Executable: path.Join(trimSuffix(source.FileName), getRuntimeExecutable(source.Platform)),
 					URL:        source.DownloadUrl,
 				})
 			}
@@ -94,4 +92,8 @@ func (c *Collection) convert() (output map[string]library.Build, err error) {
 	}
 
 	return output, nil
+}
+
+func trimSuffix(fileName string) string {
+	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
 }
