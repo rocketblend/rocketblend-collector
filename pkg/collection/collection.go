@@ -34,12 +34,12 @@ func New(library string, name string, packges []string, platforms []runtime.Plat
 	}
 }
 
-func (c *Collection) GetReference() string {
-	return path.Join(c.library, c.name, c.store.GetName())
-}
-
 func (c *Collection) GetRoute() string {
 	return path.Join("builds", c.name, c.store.GetName())
+}
+
+func (c *Collection) GetReference() string {
+	return path.Join(c.library, c.GetRoute())
 }
 
 func (c *Collection) Save(path string) error {

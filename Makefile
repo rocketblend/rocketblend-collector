@@ -20,3 +20,12 @@ dep:
 	@go mod download
 	@go mod vendor
 	@go mod tidy
+
+run:
+	@go run ./cmd/collector
+
+build:
+	@go build ./cmd/collector
+
+install:
+	@go install ./cmd/collector
