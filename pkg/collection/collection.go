@@ -82,11 +82,12 @@ func (c *Collection) convert() (output map[string]library.Build, err error) {
 			}
 		}
 		if len(sources) > 0 {
-			output[build.Version] = library.Build{
-				Reference: filepath.Join(c.GetReference(), build.Version),
-				Args:      c.args,
-				Packages:  c.packages,
-				Source:    sources,
+			output[build.Version.String()] = library.Build{
+				Reference:      filepath.Join(c.GetReference(), build.Version.String()),
+				BlenderVersion: build.Version,
+				Args:           c.args,
+				Packages:       c.packages,
+				Source:         sources,
 			}
 		}
 	}

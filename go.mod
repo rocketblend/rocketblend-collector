@@ -7,7 +7,7 @@ require (
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/rocketblend/rocketblend v0.3.0
+	github.com/rocketblend/rocketblend v0.3.1
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 )
