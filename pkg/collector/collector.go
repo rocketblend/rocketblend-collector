@@ -59,7 +59,6 @@ func New(config *Config) *Collector {
 func (c *Collector) CollectStable() *store.Store {
 	builds := store.New("stable")
 
-	// TODO: Move collector setup to a separate function/service.
 	col := colly.NewCollector(
 		colly.AllowedDomains("download.blender.org"),
 		colly.UserAgent(c.conf.UserAgent),
@@ -69,7 +68,7 @@ func (c *Collector) CollectStable() *store.Store {
 
 	// Proxy
 	if c.conf.Proxy != "" {
-		fmt.Printf("using proxy: %s\n", CensorText(c.conf.Proxy, "#", 20))
+		fmt.Printf("using proxy: %s\n", censorText(c.conf.Proxy, "#", 20))
 		rp, err := proxy.RoundRobinProxySwitcher(c.conf.Proxy)
 		if err != nil {
 			log.Fatal(err)
@@ -84,20 +83,24 @@ func (c *Collector) CollectStable() *store.Store {
 				e.Request.Visit(e.Request.AbsoluteURL(link))
 			} else {
 				now := time.Now()
-				err := builds.Add(&store.Build{
-					Name:    strings.TrimSuffix(link, filepath.Ext(link)),
-					Version: FindVerisonNumberStr(link),
-					Sources: []store.Source{
-						{
-							Platform:    ParsePlatform(link),
-							FileName:    link,
-							DownloadUrl: e.Request.AbsoluteURL(link),
-							CreatedAt:   now,
+				version, err := parseVersionNumber(link)
+				if version != nil {
+					err = builds.Add(&store.Build{
+						Name:    strings.TrimSuffix(link, filepath.Ext(link)),
+						Version: version,
+						Sources: []store.Source{
+							{
+								Platform:    parsePlatform(link),
+								FileName:    link,
+								DownloadUrl: e.Request.AbsoluteURL(link),
+								CreatedAt:   now,
+							},
 						},
-					},
-					CreatedAt: now,
-					UpdatedAt: now,
-				})
+						CreatedAt: now,
+						UpdatedAt: now,
+					})
+				}
+
 				if err != nil {
 					fmt.Println("Failed to add build to collection:", err)
 				}
@@ -127,7 +130,7 @@ func (c *Collector) isValidCrawlLink(url string) bool {
 	isValidReleaseName, _ := regexp.MatchString(expression, strings.ToLower(url))
 
 	if isValidReleaseName {
-		if version, err := ParseMajorMinorVersionNumber(url); err == nil {
+		if version, err := parseMajorMinorVersionNumber(url); err == nil {
 			if version >= c.conf.OldestSupported {
 				return true
 			}

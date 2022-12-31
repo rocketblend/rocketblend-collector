@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/rocketblend/rocketblend/pkg/core/runtime"
+	"github.com/rocketblend/rocketblend/pkg/semver"
 )
 
 type (
@@ -16,7 +17,7 @@ type (
 
 	Build struct {
 		Name      string
-		Version   string
+		Version   *semver.Version
 		Sources   []Source
 		CreatedAt time.Time
 		UpdatedAt time.Time

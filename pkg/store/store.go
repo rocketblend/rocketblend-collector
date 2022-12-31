@@ -1,6 +1,7 @@
 package store
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -25,15 +26,20 @@ func (s *Store) Add(build *Build) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	existing, ok := s.builds[build.Version]
+	if build.Version == nil {
+		return fmt.Errorf("build version cannot be nil")
+	}
+
+	version := build.Version.String()
+	existing, ok := s.builds[version]
 	if ok {
 		existing.Sources = append(existing.Sources, build.Sources...)
 		existing.UpdatedAt = build.UpdatedAt
-		s.builds[build.Version] = existing
+		s.builds[version] = existing
 		return nil
 	}
 
-	s.builds[build.Version] = *build
+	s.builds[version] = *build
 	return nil
 }
 

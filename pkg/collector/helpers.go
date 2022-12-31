@@ -1,14 +1,13 @@
 package collector
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/rocketblend/rocketblend/pkg/core/runtime"
+	"github.com/rocketblend/rocketblend/pkg/semver"
 )
 
 const (
@@ -19,14 +18,39 @@ const (
 	VersionNumberRegex   string = "[0-9]+([.][0-9]+)"
 )
 
-func FindVerisonNumberStr(input string) string {
+func findVerisonNumberStr(input string) string {
 	// Gets the full version number from the input string.
 	r, _ := regexp.Compile(fmt.Sprintf("(%s+)", VersionNumberRegex))
 	versionStr := r.FindString(strings.ToLower(input))
 	return versionStr
 }
 
-func ParseMajorMinorVersionNumber(input string) (float32, error) {
+func parseVersionNumber(input string) (*semver.Version, error) {
+	// Gets the full version number from the input string.
+	versionStr := trimOrPad(findVerisonNumberStr(input))
+	return semver.Parse(versionStr)
+}
+
+func trimOrPad(s string) string {
+	// Split the string into parts.
+	parts := strings.Split(s, ".")
+
+	// Pad or trim the parts as needed.
+	major := parts[0]
+	minor := "0"
+	patch := "0"
+	if len(parts) > 1 {
+		minor = parts[1]
+	}
+	if len(parts) > 2 {
+		patch = parts[2]
+	}
+
+	// Return the padded or trimmed string.
+	return fmt.Sprintf("%s.%s.%s", major, minor, patch)
+}
+
+func parseMajorMinorVersionNumber(input string) (float32, error) {
 	// Gets just the major and minor version number from the input string.
 	r, _ := regexp.Compile(VersionNumberRegex)
 	versionStr := r.FindString(strings.ToLower(input))
@@ -38,7 +62,7 @@ func ParseMajorMinorVersionNumber(input string) (float32, error) {
 	return float32(value), nil
 }
 
-func ParsePlatform(name string) runtime.Platform {
+func parsePlatform(name string) runtime.Platform {
 	name = strings.ToLower(name)
 	match, _ := regexp.MatchString(WindowsPlatformRegex, name)
 	if match {
@@ -64,12 +88,7 @@ func ParsePlatform(name string) runtime.Platform {
 	return runtime.Undefined
 }
 
-func GenerateHash(text string) string {
-	hash := md5.Sum([]byte(text))
-	return hex.EncodeToString(hash[:])
-}
-
-func CensorText(text string, char string, limit int) string {
+func censorText(text string, char string, limit int) string {
 	// Check if the limit is greater than the length of the input text
 	if limit > len(text) {
 		limit = len(text)
