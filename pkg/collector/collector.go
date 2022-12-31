@@ -24,7 +24,6 @@ type Config struct {
 	UserAgent       string
 	Parallelism     int
 	RandomDelay     time.Duration
-	Debug           bool
 	OldestSupported float32
 }
 
