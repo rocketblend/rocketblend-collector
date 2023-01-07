@@ -1,3 +1,5 @@
+### [Discussions](https://github.com/rocketblend/rocketblend-collector/discussions) │ [Latest Release](https://github.com/rocketblend/rocketblend-collector/releases/latest)
+
 # RocketBlend Collector
 
 [![Github tag](https://badgen.net/github/tag/rocketblend/rocketblend-collector)](https://github.com/rocketblend/rocketblend-collector/tags)
