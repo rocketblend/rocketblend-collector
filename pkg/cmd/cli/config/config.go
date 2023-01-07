@@ -15,7 +15,7 @@ type (
 		Name        string             `mapstructure:"name" validate:"required"`
 		Description string             `mapstructure:"description"`
 		Args        string             `mapstructure:"args"`
-		Packages    []string           `mapstructure:"packages"`
+		Addons      []string           `mapstructure:"addons"`
 		Platforms   []runtime.Platform `mapstructure:"platforms" validate:"required"`
 	}
 

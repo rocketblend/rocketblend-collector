@@ -1,3 +1,5 @@
+### [Discussions](https://github.com/rocketblend/rocketblend-collector/discussions) │ [Latest Release](https://github.com/rocketblend/rocketblend-collector/releases/latest)
+
 # RocketBlend Collector
 
 [![Github tag](https://badgen.net/github/tag/rocketblend/rocketblend-collector)](https://github.com/rocketblend/rocketblend-collector/tags)
@@ -27,8 +29,8 @@ collections:
   - name: rocketblend
     platforms:
       - windows
-    packages:
-      - github.com/rocketblend/official-library/packages/rocketblend/0.1.0
+    addons:
+      - github.com/rocketblend/official-library/addons/rocketblend/0.1.0
 ```
 
 You can also use an environment variable to set the proxy url.
