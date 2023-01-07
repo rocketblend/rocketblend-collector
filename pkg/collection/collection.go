@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
-	"github.com/rocketblend/rocketblend/pkg/core/library"
+	"github.com/rocketblend/rocketblend/pkg/core/build"
 	"github.com/rocketblend/rocketblend/pkg/core/runtime"
 )
 
@@ -16,18 +16,18 @@ type (
 	Collection struct {
 		library   string
 		name      string
-		packages  []string
+		addons    []string
 		platforms []runtime.Platform
 		args      string
 		store     *store.Store
 	}
 )
 
-func New(library string, name string, packges []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
+func New(library string, name string, addons []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
 	return &Collection{
 		library:   library,
 		name:      name,
-		packages:  packges,
+		addons:    addons,
 		args:      args,
 		platforms: platforms,
 		store:     store,
@@ -48,18 +48,18 @@ func (c *Collection) Save(path string) error {
 		return err
 	}
 
-	for version, build := range builds {
+	for version, b := range builds {
 		buildPath := filepath.Join(path, c.GetRoute(), version)
 		if err := os.MkdirAll(buildPath, 0755); err != nil {
 			return err
 		}
 
-		buildJSON, err := json.Marshal(build)
+		buildJSON, err := json.Marshal(b)
 		if err != nil {
 			return err
 		}
 
-		if err := os.WriteFile(filepath.Join(buildPath, "build.json"), buildJSON, 0644); err != nil {
+		if err := os.WriteFile(filepath.Join(buildPath, build.BuildFile), buildJSON, 0644); err != nil {
 			return err
 		}
 	}
@@ -67,14 +67,14 @@ func (c *Collection) Save(path string) error {
 	return nil
 }
 
-func (c *Collection) convert() (output map[string]library.Build, err error) {
-	output = make(map[string]library.Build)
+func (c *Collection) convert() (output map[string]build.Build, err error) {
+	output = make(map[string]build.Build)
 
-	for _, build := range c.store.GetAll() {
-		sources := []*library.Source{}
-		for _, source := range build.Sources {
+	for _, b := range c.store.GetAll() {
+		sources := []*build.Source{}
+		for _, source := range b.Sources {
 			if contains(c.platforms, source.Platform) {
-				sources = append(sources, &library.Source{
+				sources = append(sources, &build.Source{
 					Platform:   source.Platform,
 					Executable: path.Join(trimSuffix(source.FileName), getRuntimeExecutable(source.Platform)),
 					URL:        source.DownloadUrl,
@@ -82,11 +82,10 @@ func (c *Collection) convert() (output map[string]library.Build, err error) {
 			}
 		}
 		if len(sources) > 0 {
-			output[build.Version.String()] = library.Build{
-				Reference:      filepath.Join(c.GetReference(), build.Version.String()),
-				BlenderVersion: build.Version,
+			output[b.Version.String()] = build.Build{
+				BlenderVersion: b.Version,
 				Args:           c.args,
-				Packages:       c.packages,
+				Addons:         c.addons,
 				Source:         sources,
 			}
 		}

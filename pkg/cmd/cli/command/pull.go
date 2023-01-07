@@ -22,7 +22,7 @@ func NewPullCommand(srv *Service) *cobra.Command {
 
 			for _, conf := range *srv.config.Collections {
 				fmt.Println("saving collection: " + conf.Name)
-				c := collection.New(srv.config.Library, conf.Name, conf.Packages, conf.Platforms, conf.Args, store)
+				c := collection.New(srv.config.Library, conf.Name, conf.Addons, conf.Platforms, conf.Args, store)
 				if err := c.Save(wd); err != nil {
 					fmt.Printf("failed to save collection: %s", err)
 				} else {
