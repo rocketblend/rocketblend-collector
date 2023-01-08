@@ -32,3 +32,7 @@ data/
 # Testing
 builds/
 collector.yaml
+dist/
+
+# Cosign
+*.key

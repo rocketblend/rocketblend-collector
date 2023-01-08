@@ -44,3 +44,23 @@ export COLLECTOR_PROXY="http://user:pass@proxy.com"
 ```bash
 collector pull
 ```
+
+## Development
+
+Run the application
+
+```bash
+make run
+```
+
+Install the application
+
+```bash
+make install
+```
+
+Create a new release
+
+```bash
+make release version=v1.2.0 
+```
