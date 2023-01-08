@@ -34,6 +34,6 @@ dry:
 	@goreleaser release --snapshot --rm-dist
 
 release:
-	@git tag $version
-	@git push origin $version
+	@git tag $(version)
+	@git push origin $(version)
 	@goreleaser
