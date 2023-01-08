@@ -29,3 +29,8 @@ build:
 
 install:
 	@go install ./cmd/collector
+
+release:
+  git tag $version
+  git push origin $version
+  goreleaser
