@@ -32,3 +32,4 @@ data/
 # Testing
 builds/
 collector.yaml
+dist/
