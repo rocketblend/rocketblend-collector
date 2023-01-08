@@ -30,7 +30,10 @@ build:
 install:
 	@go install ./cmd/collector
 
+dry:
+	@goreleaser release --snapshot --rm-dist
+
 release:
-  git tag $version
-  git push origin $version
-  goreleaser
+	@git tag $version
+	@git push origin $version
+	@goreleaser

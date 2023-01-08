@@ -26,6 +26,10 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+    files:
+      - README.md
+      - LICENSE*
+    wrap_in_directory: true
 checksum:
   name_template: "checksums.txt"
 snapshot:
@@ -36,6 +40,17 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+signs:
+  - cmd: cosign
+    stdin: "{{ .Env.COSIGN_PWD }}"
+    args:
+      [
+        "sign-blob",
+        "--key=cosign.key",
+        "--output-signature=${signature}",
+        "${artifact}",
+      ]
+    artifacts: all
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json

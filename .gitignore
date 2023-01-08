@@ -33,3 +33,6 @@ data/
 builds/
 collector.yaml
 dist/
+
+# Cosign
+*.key
