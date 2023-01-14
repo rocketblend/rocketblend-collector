@@ -1,21 +1,36 @@
 package collection
 
 import (
-	"path"
+	"fmt"
 	"path/filepath"
 	"strings"
 
 	"github.com/rocketblend/rocketblend/pkg/core/runtime"
 )
 
-func getRuntimeExecutable(fileName string, platform runtime.Platform) string {
+const (
+	blenderExecutable = "blender"
+	appContents       = "Blender.app/Contents/MacOS/"
+)
+
+var executableNames = map[runtime.Platform]string{
+	runtime.Linux:     blenderExecutable,
+	runtime.Windows:   blenderExecutable + ".exe",
+	runtime.DarwinAmd: appContents + blenderExecutable,
+	runtime.DarwinArm: appContents + blenderExecutable,
+}
+
+func getRuntimeExecutable(fileName string, platform runtime.Platform) (string, error) {
+	executableName, ok := executableNames[platform]
+	if !ok {
+		return "", fmt.Errorf("executable not found for platform: %v", platform)
+	}
+
 	switch platform {
-	case runtime.Windows:
-		return path.Join(trimSuffix(fileName), "blender.exe")
-	case runtime.DarwinAmd, runtime.DarwinArm:
-		return "Blender.app/Contents/MacOS/blender"
+	case runtime.Windows, runtime.Linux:
+		return filepath.Join(trimSuffix(fileName), executableName), nil
 	default:
-		return "blender"
+		return executableName, nil
 	}
 }
 
@@ -29,5 +44,6 @@ func contains(s []runtime.Platform, e runtime.Platform) bool {
 }
 
 func trimSuffix(fileName string) string {
-	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
+	base := filepath.Base(fileName)
+	return strings.TrimSuffix(base, filepath.Ext(base))
 }
