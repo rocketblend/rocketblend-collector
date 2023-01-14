@@ -1,21 +1,21 @@
 package collection
 
 import (
-	"fmt"
+	"path"
+	"path/filepath"
+	"strings"
 
 	"github.com/rocketblend/rocketblend/pkg/core/runtime"
 )
 
-const BlenderExecutable = "blender"
-
-func getRuntimeExecutable(platform runtime.Platform) string {
+func getRuntimeExecutable(fileName string, platform runtime.Platform) string {
 	switch platform {
 	case runtime.Windows:
-		return fmt.Sprintf("%s.exe", BlenderExecutable)
+		return path.Join(trimSuffix(fileName), "blender.exe")
 	case runtime.DarwinAmd, runtime.DarwinArm:
-		return fmt.Sprintf("%s.dmg", BlenderExecutable)
+		return "Blender.app/Contents/MacOS/blender"
 	default:
-		return BlenderExecutable
+		return "blender"
 	}
 }
 
@@ -26,4 +26,8 @@ func contains(s []runtime.Platform, e runtime.Platform) bool {
 		}
 	}
 	return false
+}
+
+func trimSuffix(fileName string) string {
+	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
 }
