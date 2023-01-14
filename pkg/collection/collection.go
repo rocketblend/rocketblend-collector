@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
 	"github.com/rocketblend/rocketblend/pkg/core/build"
@@ -74,9 +73,13 @@ func (c *Collection) convert() (output map[string]build.Build, err error) {
 		sources := []*build.Source{}
 		for _, source := range b.Sources {
 			if contains(c.platforms, source.Platform) {
+				executable, err := getRuntimeExecutable(source.FileName, source.Platform)
+				if err != nil {
+					return nil, err
+				}
 				sources = append(sources, &build.Source{
 					Platform:   source.Platform,
-					Executable: path.Join(trimSuffix(source.FileName), getRuntimeExecutable(source.Platform)),
+					Executable: executable,
 					URL:        source.DownloadUrl,
 				})
 			}
@@ -92,8 +95,4 @@ func (c *Collection) convert() (output map[string]build.Build, err error) {
 	}
 
 	return output, nil
-}
-
-func trimSuffix(fileName string) string {
-	return strings.TrimSuffix(fileName, filepath.Ext(fileName))
 }
