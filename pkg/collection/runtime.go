@@ -27,12 +27,15 @@ func getRuntimeExecutable(fileName string, platform runtime.Platform) (string, e
 		return "", fmt.Errorf("executable not found for platform: %v", platform)
 	}
 
+	executablePath := ""
 	switch platform {
-	case runtime.Windows, runtime.Linux:
-		return filepath.Join(trimSuffix(fileName), executableName), nil
-	default:
-		return executableName, nil
+	case runtime.Windows:
+		executablePath = trimExt(fileName)
+	case runtime.Linux:
+		executablePath = trimExt(trimExt(fileName))
 	}
+
+	return filepath.Join(executablePath, executableName), nil
 }
 
 func contains(s []runtime.Platform, e runtime.Platform) bool {
@@ -44,17 +47,10 @@ func contains(s []runtime.Platform, e runtime.Platform) bool {
 	return false
 }
 
-func trimSuffix(fileName string) string {
+func trimExt(fileName string) string {
 	if fileName == "" || !strings.Contains(fileName, ".") {
 		return fileName
 	}
 
-	// Trim all extensions (e.g. .tar.gz)
-	for {
-		fileName = strings.TrimSuffix(fileName, path.Ext(fileName))
-		if path.Ext(fileName) == "" {
-			break
-		}
-	}
-	return fileName
+	return strings.TrimSuffix(path.Base(fileName), path.Ext(fileName))
 }
