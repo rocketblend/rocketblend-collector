@@ -2,6 +2,7 @@ package collection
 
 import (
 	"fmt"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -44,6 +45,16 @@ func contains(s []runtime.Platform, e runtime.Platform) bool {
 }
 
 func trimSuffix(fileName string) string {
-	base := filepath.Base(fileName)
-	return strings.TrimSuffix(base, filepath.Ext(base))
+	if fileName == "" || !strings.Contains(fileName, ".") {
+		return fileName
+	}
+
+	// Trim all extensions (e.g. .tar.gz)
+	for {
+		fileName = strings.TrimSuffix(fileName, path.Ext(fileName))
+		if path.Ext(fileName) == "" {
+			break
+		}
+	}
+	return fileName
 }
