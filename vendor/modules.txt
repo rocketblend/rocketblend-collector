@@ -138,7 +138,7 @@ github.com/pierrec/lz4/v4/internal/xxh32
 # github.com/rivo/uniseg v0.4.3
 ## explicit; go 1.18
 github.com/rivo/uniseg
-# github.com/rocketblend/rocketblend v0.5.0
+# github.com/rocketblend/rocketblend v0.5.1-0.20230116150508-ce7372ca94ac
 ## explicit; go 1.19
 github.com/rocketblend/rocketblend/pkg/core/rocketpack
 github.com/rocketblend/rocketblend/pkg/core/runtime

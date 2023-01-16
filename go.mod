@@ -7,7 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/rocketblend/rocketblend v0.5.0
+	github.com/rocketblend/rocketblend v0.5.1-0.20230116150508-ce7372ca94ac
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 	sigs.k8s.io/yaml v1.3.0
