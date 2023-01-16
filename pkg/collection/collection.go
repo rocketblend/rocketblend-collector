@@ -1,13 +1,14 @@
 package collection
 
 import (
-	"encoding/json"
 	"os"
 	"path"
 	"path/filepath"
 
+	"sigs.k8s.io/yaml"
+
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
-	"github.com/rocketblend/rocketblend/pkg/core/build"
+	"github.com/rocketblend/rocketblend/pkg/core/rocketpack"
 	"github.com/rocketblend/rocketblend/pkg/core/runtime"
 )
 
@@ -53,12 +54,12 @@ func (c *Collection) Save(path string) error {
 			return err
 		}
 
-		buildJSON, err := json.Marshal(b)
+		buildJSON, err := yaml.Marshal(b)
 		if err != nil {
 			return err
 		}
 
-		if err := os.WriteFile(filepath.Join(buildPath, build.BuildFile), buildJSON, 0644); err != nil {
+		if err := os.WriteFile(filepath.Join(buildPath, rocketpack.PackgeFile), buildJSON, 0644); err != nil {
 			return err
 		}
 	}
@@ -66,18 +67,18 @@ func (c *Collection) Save(path string) error {
 	return nil
 }
 
-func (c *Collection) convert() (output map[string]build.Build, err error) {
-	output = make(map[string]build.Build)
+func (c *Collection) convert() (output map[string]rocketpack.RocketPack, err error) {
+	output = make(map[string]rocketpack.RocketPack)
 
 	for _, b := range c.store.GetAll() {
-		sources := []*build.Source{}
+		sources := []*rocketpack.BuildSource{}
 		for _, source := range b.Sources {
 			if contains(c.platforms, source.Platform) {
 				executable, err := getRuntimeExecutable(source.FileName, source.Platform)
 				if err != nil {
 					return nil, err
 				}
-				sources = append(sources, &build.Source{
+				sources = append(sources, &rocketpack.BuildSource{
 					Platform:   source.Platform,
 					Executable: executable,
 					URL:        source.DownloadUrl,
@@ -85,11 +86,13 @@ func (c *Collection) convert() (output map[string]build.Build, err error) {
 			}
 		}
 		if len(sources) > 0 {
-			output[b.Version.String()] = build.Build{
-				BlenderVersion: b.Version,
-				Args:           c.args,
-				Addons:         c.addons,
-				Source:         sources,
+			output[b.Version.String()] = rocketpack.RocketPack{
+				Build: &rocketpack.Build{
+					Version: b.Version,
+					Args:    c.args,
+					Addons:  c.addons,
+					Sources: sources,
+				},
 			}
 		}
 	}
