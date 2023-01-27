@@ -21,8 +21,11 @@ func NewService(config *config.Config, collector *collector.Collector) *Service 
 func NewCommand(srv *Service) *cobra.Command {
 	c := &cobra.Command{
 		Use:   "collector",
-		Short: "CLI tool for generating Blender build configurations for use with RocketBlend",
-		Long:  ``,
+		Short: "Collector is a package generator tool for RocketBlend.",
+		Long: `Collector is a command-line tool for generating package configurations quickly
+and easily for use with RocketBlend.
+
+Documentation is available at https://docs.rocketblend.io/v/collector/`,
 	}
 	c.SetVersionTemplate("{{.Version}}\n")
 

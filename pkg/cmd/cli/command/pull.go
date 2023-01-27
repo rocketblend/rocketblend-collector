@@ -11,8 +11,9 @@ import (
 func NewPullCommand(srv *Service) *cobra.Command {
 	c := &cobra.Command{
 		Use:   "pull",
-		Short: "Pulls the current stable builds from the Blender build server and generates build configurations",
-		Long:  ``,
+		Short: "Generate build package collections for the current stable builds",
+		Long: `generate build package collections specified by collector.yaml by web-scraping the Blender
+build server for the current stable builds.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			wd, _ := os.Getwd()
 

@@ -30,6 +30,9 @@ build:
 install:
 	@go install ./cmd/collector
 
+image:
+	@svg-term --command collector --out docs/assets/collector-about.svg --window --no-cursor --at 50 --width 85
+
 dry:
 	@goreleaser release --snapshot --rm-dist
 

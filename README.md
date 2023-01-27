@@ -1,4 +1,4 @@
-### [Discussions](https://github.com/rocketblend/rocketblend-collector/discussions) │ [Latest Release](https://github.com/rocketblend/rocketblend-collector/releases/latest)
+### [Discussions](https://github.com/rocketblend/rocketblend-collector/discussions) │ [Documentation](https://docs.rocketblend.io/v/collector) │ [Latest Release](https://github.com/rocketblend/rocketblend-collector/releases/latest)
 
 # RocketBlend Collector
 
@@ -7,9 +7,16 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/rocketblend/rocketblend-collector)](https://goreportcard.com/report/github.com/rocketblend/rocketblend-collector)
 [![GitHub](https://img.shields.io/github/license/rocketblend/rocketblend-collector)](https://github.com/rocketblend/rocketblend-collector/blob/master/LICENSE)
 
-CLI tool for collecting [Blender](https://www.blender.org/) build information and generating [Libraries](https://github.com/rocketblend/official-library) for use with use with [RocketBlend](https://github.com/rocketblend/rocketblend)
 
-## Example config
+![Hero image of Collector CLI](docs/assets/collector-about.svg)
+
+> Collector is a command-line tool for generating package configurations quickly and easily for use with [RocketBlend](https://github.com/rocketblend/rocketblend).
+
+## Getting Started
+
+See [Quick Start](https://docs.rocketblend.io/v/collector/getting-started/quick-start) in our documentation.
+
+### Example config
 
 ```yaml
 # collector.yaml
@@ -39,28 +46,15 @@ You can also use an environment variable to set the proxy url.
 export COLLECTOR_PROXY="http://user:pass@proxy.com"
 ```
 
-## Usage
+### Usage
 
 ```bash
 collector pull
 ```
 
-## Development
+## See Also
 
-Run the application
-
-```bash
-make run
-```
-
-Install the application
-
-```bash
-make install
-```
-
-Create a new release
-
-```bash
-make release version=v1.2.0 
-```
+- [RocketBlend](https://github.com/rocketblend/rocketblend) - Main project.
+- [RocketBlend Launcher](https://github.com/rocketblend/rocketblend-launcher) - Replacement launcher for Blender that utilises RocketBlend.
+- [RocketBlend Companion](https://github.com/rocketblend/rocketblend-companion) - Blender addon to aid with working with RocketBlend. **NOTE: WIP**
+- [Official Library](https://github.com/rocketblend/official-library) - Collection of builds and addons.
