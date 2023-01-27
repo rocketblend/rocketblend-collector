@@ -12,7 +12,11 @@
 
 > Collector is a command-line tool for generating package configurations quickly and easily for use with [RocketBlend](https://github.com/rocketblend/rocketblend).
 
-## Example config
+## Getting Started
+
+See [Quick Start](https://docs.rocketblend.io/v/collector/getting-started/quick-start) in our documentation.
+
+### Example config
 
 ```yaml
 # collector.yaml
@@ -42,7 +46,7 @@ You can also use an environment variable to set the proxy url.
 export COLLECTOR_PROXY="http://user:pass@proxy.com"
 ```
 
-## Usage
+### Usage
 
 ```bash
 collector pull
