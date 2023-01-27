@@ -6,6 +6,7 @@ require (
 	github.com/corpix/uarand v0.2.0
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/gocolly/colly/v2 v2.1.0
+	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/rocketblend/rocketblend v0.5.1-0.20230116150508-ce7372ca94ac
 	github.com/spf13/cobra v1.6.1
@@ -21,6 +22,7 @@ require (
 	github.com/antchfx/xmlquery v1.2.4 // indirect
 	github.com/antchfx/xpath v1.1.8 // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
+	github.com/fatih/color v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
@@ -35,6 +37,8 @@ require (
 	github.com/klauspost/pgzip v1.2.5 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
+	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/mattn/go-runewidth v0.0.14 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
