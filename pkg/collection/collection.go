@@ -15,6 +15,7 @@ import (
 type (
 	Collection struct {
 		library   string
+		outputDir string
 		name      string
 		addons    []string
 		platforms []runtime.Platform
@@ -23,9 +24,10 @@ type (
 	}
 )
 
-func New(library string, name string, addons []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
+func New(library string, outputDir string, name string, addons []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
 	return &Collection{
 		library:   library,
+		outputDir: outputDir,
 		name:      name,
 		addons:    addons,
 		args:      args,
@@ -35,7 +37,7 @@ func New(library string, name string, addons []string, platforms []runtime.Platf
 }
 
 func (c *Collection) GetRoute() string {
-	return path.Join("builds", c.name, c.store.GetName())
+	return path.Join(c.outputDir, c.name, "builds", c.store.GetName())
 }
 
 func (c *Collection) GetReference() string {

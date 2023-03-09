@@ -30,8 +30,8 @@ tmp/
 data/
 
 # Testing
-builds/
 collector.yaml
+examples/
 dist/
 
 # Cosign
