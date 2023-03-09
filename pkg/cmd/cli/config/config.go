@@ -28,6 +28,7 @@ type (
 
 	Config struct {
 		Library     string        `mapstructure:"library" validate:"required"`
+		OutputDir   string        `mapstructure:"outputDir"`
 		Collector   *Collector    `mapstructure:"collector"`
 		Collections *[]Collection `mapstructure:"collections" validate:"required"`
 	}
@@ -61,6 +62,7 @@ func Load() (config *Config, err error) {
 	v.SetDefault("collector.parallelism", 1)
 	v.SetDefault("collector.delay", "15s")
 	v.SetDefault("collector.agent", "random")
+	v.SetDefault("collector.outputDir", ".")
 
 	v.SetConfigName("collector") // Set the name of the configuration file
 	v.AddConfigPath(".")         // Look for the configuration file in the current
