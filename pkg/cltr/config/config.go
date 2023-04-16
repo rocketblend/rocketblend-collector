@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rocketblend/rocketblend/pkg/core/runtime"
+	"github.com/rocketblend/rocketblend/pkg/rocketblend/runtime"
 	"github.com/spf13/viper"
 )
 

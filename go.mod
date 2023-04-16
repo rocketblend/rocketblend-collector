@@ -8,7 +8,7 @@ require (
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/ivanpirog/coloredcobra v1.0.1
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/rocketblend/rocketblend v0.5.1-0.20230116150508-ce7372ca94ac
+	github.com/rocketblend/rocketblend v0.5.1-0.20230416153424-0a5da24910a5
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.14.0
 	sigs.k8s.io/yaml v1.3.0
