@@ -1,12 +1,12 @@
-package cli
+package cltr
 
 import (
 	"fmt"
 
 	cc "github.com/ivanpirog/coloredcobra"
 
-	"github.com/rocketblend/rocketblend-collector/pkg/cmd/cli/command"
-	"github.com/rocketblend/rocketblend-collector/pkg/cmd/cli/config"
+	"github.com/rocketblend/rocketblend-collector/pkg/cltr/command"
+	"github.com/rocketblend/rocketblend-collector/pkg/cltr/config"
 	"github.com/rocketblend/rocketblend-collector/pkg/collector"
 )
 

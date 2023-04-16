@@ -49,7 +49,7 @@ export COLLECTOR_PROXY="http://user:pass@proxy.com"
 ### Usage
 
 ```bash
-collector pull
+cltr pull
 ```
 
 ## See Also
