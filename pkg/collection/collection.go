@@ -8,8 +8,8 @@ import (
 	"sigs.k8s.io/yaml"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
-	"github.com/rocketblend/rocketblend/pkg/core/rocketpack"
-	"github.com/rocketblend/rocketblend/pkg/core/runtime"
+	"github.com/rocketblend/rocketblend/pkg/rocketblend/rocketpack"
+	"github.com/rocketblend/rocketblend/pkg/rocketblend/runtime"
 )
 
 type (
