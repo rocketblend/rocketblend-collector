@@ -38,4 +38,4 @@ dry:
 release:
 	@git tag $(version)
 	@git push origin $(version)
-	@goreleaser
+	@goreleaser --rm-dist
