@@ -1,16 +1,34 @@
-project_name: cltr
+project_name: collector
 
 before:
   hooks:
     - make check
 builds:
-  - main: ./cmd/cltr
+  - main: ./cmd/collector
     env:
       - CGO_ENABLED=0
     goos:
       - linux
       - windows
       - darwin
+
+scoop:
+  bucket:
+    owner: rocketblend
+    name: scoop-bucket
+    branch: master
+  homepage: "https://docs.rocketblend.io/v/collector/"
+  description: "Package generator for RocketBlend."
+  license: "GPL-3.0"
+
+brews:
+  - tap:
+      owner: rocketblend
+      name: homebrew-tap
+      branch: master
+    homepage: "https://docs.rocketblend.io/v/collector/"
+    description: "Package generator for RocketBlend."
+    license: "GPL-3.0"
 
 archives:
   - format: tar.gz

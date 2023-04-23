@@ -21,16 +21,16 @@ dep:
 	@go mod tidy
 
 run:
-	@go run ./cmd/cltr
+	@go run ./cmd/collector
 
 build:
-	@go build ./cmd/cltr
+	@go build ./cmd/collector
 
 install:
-	@go install ./cmd/cltr
+	@go install ./cmd/collector
 
 image:
-	@svg-term --command cltr --out docs/assets/collector-about.svg --window --no-cursor --at 50 --width 85 --height 18
+	@svg-term --command collector --out docs/assets/collector-about.svg --window --no-cursor --at 50 --width 85 --height 18
 
 dry:
 	@goreleaser release --snapshot --rm-dist

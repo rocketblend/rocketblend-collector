@@ -1,6 +1,6 @@
 ### [Discussions](https://github.com/rocketblend/rocketblend-collector/discussions) │ [Documentation](https://docs.rocketblend.io/v/collector) │ [Latest Release](https://github.com/rocketblend/rocketblend-collector/releases/latest)
 
-# RocketBlend Collector (CLTR)
+# RocketBlend Collector
 
 [![Github tag](https://badgen.net/github/tag/rocketblend/rocketblend-collector)](https://github.com/rocketblend/rocketblend-collector/tags)
 [![Go Doc](https://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/rocketblend/rocketblend-collector)
@@ -49,7 +49,7 @@ export COLLECTOR_PROXY="http://user:pass@proxy.com"
 ### Usage
 
 ```bash
-cltr pull
+collector pull
 ```
 
 ## See Also
