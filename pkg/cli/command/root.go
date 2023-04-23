@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/rocketblend/rocketblend-collector/pkg/cltr/config"
+	"github.com/rocketblend/rocketblend-collector/pkg/cli/config"
 	"github.com/rocketblend/rocketblend-collector/pkg/collector"
 	"github.com/spf13/cobra"
 )
@@ -20,7 +20,7 @@ func NewService(config *config.Config, collector *collector.Collector) *Service 
 
 func NewCommand(srv *Service) *cobra.Command {
 	c := &cobra.Command{
-		Use:   "cltr",
+		Use:   "collector",
 		Short: "Collector is a package generator tool for RocketBlend.",
 		Long: `Collector is a command-line tool for generating package configurations quickly
 and easily for use with RocketBlend.

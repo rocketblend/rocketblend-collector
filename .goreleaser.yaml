@@ -1,10 +1,10 @@
-project_name: cltr
+project_name: collector
 
 before:
   hooks:
     - make check
 builds:
-  - main: ./cmd/cltr
+  - main: ./cmd/collector
     env:
       - CGO_ENABLED=0
     goos:
