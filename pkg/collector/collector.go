@@ -67,11 +67,12 @@ func (c *Collector) CollectStable() (*store.Store, error) {
 
 	// Proxy
 	if c.conf.Proxy != "" {
-		fmt.Printf("using proxy: %s\n", censorText(c.conf.Proxy, "#", 20))
+		fmt.Printf("Using proxy: %s\n", censorText(c.conf.Proxy, "#", 20))
 		rp, err := proxy.RoundRobinProxySwitcher(c.conf.Proxy)
 		if err != nil {
 			return nil, err
 		}
+
 		col.SetProxyFunc(rp)
 	}
 
@@ -118,7 +119,11 @@ func (c *Collector) CollectStable() (*store.Store, error) {
 		fmt.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
 	})
 
-	col.Visit(ReleaseUrl)
+	err := col.Visit(ReleaseUrl)
+	if err != nil {
+		return nil, err
+	}
+
 	col.Wait()
 
 	return builds, nil

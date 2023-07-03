@@ -8,13 +8,13 @@ import (
 type Store struct {
 	mu     sync.Mutex
 	name   string
-	builds map[string]Build
+	builds map[string]*Build
 }
 
 func New(name string) *Store {
 	return &Store{
 		name:   name,
-		builds: make(map[string]Build),
+		builds: make(map[string]*Build),
 	}
 }
 
@@ -39,10 +39,10 @@ func (s *Store) Add(build *Build) error {
 		return nil
 	}
 
-	s.builds[version] = *build
+	s.builds[version] = build
 	return nil
 }
 
-func (s *Store) GetAll() map[string]Build {
+func (s *Store) GetAll() map[string]*Build {
 	return s.builds
 }
