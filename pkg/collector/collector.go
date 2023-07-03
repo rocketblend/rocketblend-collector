@@ -2,7 +2,6 @@ package collector
 
 import (
 	"fmt"
-	"log"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -56,7 +55,7 @@ func New(config *Config) *Collector {
 	}
 }
 
-func (c *Collector) CollectStable() *store.Store {
+func (c *Collector) CollectStable() (*store.Store, error) {
 	builds := store.New("stable")
 
 	col := colly.NewCollector(
@@ -71,7 +70,7 @@ func (c *Collector) CollectStable() *store.Store {
 		fmt.Printf("using proxy: %s\n", censorText(c.conf.Proxy, "#", 20))
 		rp, err := proxy.RoundRobinProxySwitcher(c.conf.Proxy)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 		col.SetProxyFunc(rp)
 	}
@@ -122,7 +121,7 @@ func (c *Collector) CollectStable() *store.Store {
 	col.Visit(ReleaseUrl)
 	col.Wait()
 
-	return builds
+	return builds, nil
 }
 
 func (c *Collector) isValidCrawlLink(url string) bool {

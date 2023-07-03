@@ -5,26 +5,26 @@ import (
 	"path"
 	"path/filepath"
 
-	"sigs.k8s.io/yaml"
-
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
-	"github.com/rocketblend/rocketblend/pkg/rocketblend/rocketpack"
-	"github.com/rocketblend/rocketblend/pkg/rocketblend/runtime"
+	"github.com/rocketblend/rocketblend/pkg/downloader"
+	"github.com/rocketblend/rocketblend/pkg/driver/reference"
+	"github.com/rocketblend/rocketblend/pkg/driver/rocketpack"
+	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
 )
 
 type (
 	Collection struct {
+		store     *store.Store
 		library   string
 		outputDir string
 		name      string
-		addons    []string
+		addons    []reference.Reference
 		platforms []runtime.Platform
 		args      string
-		store     *store.Store
 	}
 )
 
-func New(library string, outputDir string, name string, addons []string, platforms []runtime.Platform, args string, store *store.Store) *Collection {
+func New(library string, outputDir string, name string, addons []reference.Reference, platforms []runtime.Platform, args string, store *store.Store) *Collection {
 	return &Collection{
 		library:   library,
 		outputDir: outputDir,
@@ -56,12 +56,7 @@ func (c *Collection) Save(path string) error {
 			return err
 		}
 
-		buildJSON, err := yaml.Marshal(b)
-		if err != nil {
-			return err
-		}
-
-		if err := os.WriteFile(filepath.Join(buildPath, rocketpack.PackgeFile), buildJSON, 0644); err != nil {
+		if err := rocketpack.Save(filepath.Join(buildPath, rocketpack.FileName), b); err != nil {
 			return err
 		}
 	}
@@ -69,26 +64,31 @@ func (c *Collection) Save(path string) error {
 	return nil
 }
 
-func (c *Collection) convert() (output map[string]rocketpack.RocketPack, err error) {
-	output = make(map[string]rocketpack.RocketPack)
-
+func (c *Collection) convert() (output map[string]*rocketpack.RocketPack, err error) {
+	output = make(map[string]*rocketpack.RocketPack)
 	for _, b := range c.store.GetAll() {
-		sources := []*rocketpack.BuildSource{}
+		sources := make(map[runtime.Platform]*rocketpack.Source)
 		for _, source := range b.Sources {
 			if contains(c.platforms, source.Platform) {
 				executable, err := getRuntimeExecutable(source.FileName, source.Platform)
 				if err != nil {
 					return nil, err
 				}
-				sources = append(sources, &rocketpack.BuildSource{
-					Platform:   source.Platform,
-					Executable: executable,
-					URL:        source.DownloadUrl,
-				})
+
+				uri, err := downloader.NewURI(source.DownloadUrl)
+				if err != nil {
+					return nil, err
+				}
+
+				sources[source.Platform] = &rocketpack.Source{
+					Resource: executable,
+					URI:      uri,
+				}
 			}
 		}
+
 		if len(sources) > 0 {
-			output[b.Version.String()] = rocketpack.RocketPack{
+			output[b.Version.String()] = &rocketpack.RocketPack{
 				Build: &rocketpack.Build{
 					Version: b.Version,
 					Args:    c.args,

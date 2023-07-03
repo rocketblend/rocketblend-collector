@@ -6,17 +6,18 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rocketblend/rocketblend/pkg/rocketblend/runtime"
+	"github.com/rocketblend/rocketblend/pkg/driver/reference"
+	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
 	"github.com/spf13/viper"
 )
 
 type (
 	Collection struct {
-		Name        string             `mapstructure:"name" validate:"required"`
-		Description string             `mapstructure:"description"`
-		Args        string             `mapstructure:"args"`
-		Addons      []string           `mapstructure:"addons"`
-		Platforms   []runtime.Platform `mapstructure:"platforms" validate:"required"`
+		Name        string                `mapstructure:"name" validate:"required"`
+		Description string                `mapstructure:"description"`
+		Args        string                `mapstructure:"args"`
+		Addons      []reference.Reference `mapstructure:"addons"`
+		Platforms   []runtime.Platform    `mapstructure:"platforms" validate:"required"`
 	}
 
 	Collector struct {
@@ -30,7 +31,7 @@ type (
 		Library     string        `mapstructure:"library" validate:"required"`
 		OutputDir   string        `mapstructure:"outputDir"`
 		Collector   *Collector    `mapstructure:"collector"`
-		Collections *[]Collection `mapstructure:"collections" validate:"required"`
+		Collections []*Collection `mapstructure:"collections" validate:"required"`
 	}
 )
 
@@ -51,16 +52,15 @@ func PlatformHookFunc() mapstructure.DecodeHookFuncType {
 		}
 
 		// Return the parsed value
-		p := runtime.Platform(0)
-		return p.FromString(data.(string)), nil
+		return runtime.PlatformFromString(data.(string)), nil
 	}
 }
 
 func Load() (config *Config, err error) {
 	v := viper.New()
 
-	v.SetDefault("collector.parallelism", 1)
-	v.SetDefault("collector.delay", "15s")
+	v.SetDefault("collector.parallelism", 2)
+	v.SetDefault("collector.delay", "10s")
 	v.SetDefault("collector.agent", "random")
 	v.SetDefault("collector.outputDir", ".")
 

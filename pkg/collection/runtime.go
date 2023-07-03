@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/rocketblend/rocketblend/pkg/rocketblend/runtime"
+	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
 )
 
 const (

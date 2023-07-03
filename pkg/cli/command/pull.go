@@ -12,24 +12,32 @@ func NewPullCommand(srv *Service) *cobra.Command {
 	c := &cobra.Command{
 		Use:   "pull",
 		Short: "Generate build package collections for the current stable builds",
-		Long: `generate build package collections specified by collector.yaml by web-scraping the Blender
+		Long: `Generate build package collections specified by collector.yaml by web-scraping the Blender
 build server for the current stable builds.`,
-		Run: func(cmd *cobra.Command, args []string) {
-			wd, _ := os.Getwd()
+		RunE: func(cmd *cobra.Command, args []string) error {
+			wd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
 
-			fmt.Println("pulling builds...")
-			store := srv.collector.CollectStable()
-			fmt.Println("done pulling builds")
+			fmt.Println("Pulling builds...")
 
-			for _, conf := range *srv.config.Collections {
-				fmt.Println("saving collection: " + conf.Name)
+			store, err := srv.collector.CollectStable()
+			if err != nil {
+				return err
+			}
+
+			for _, conf := range srv.config.Collections {
+				fmt.Println("Saving '" + conf.Name + "' collection...")
+
 				c := collection.New(srv.config.Library, srv.config.OutputDir, conf.Name, conf.Addons, conf.Platforms, conf.Args, store)
+
 				if err := c.Save(wd); err != nil {
-					fmt.Printf("failed to save collection: %s", err)
-				} else {
-					fmt.Println("done saving collection")
+					return err
 				}
 			}
+
+			return nil
 		},
 	}
 

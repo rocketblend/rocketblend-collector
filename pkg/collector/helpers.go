@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rocketblend/rocketblend/pkg/rocketblend/runtime"
+	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
 	"github.com/rocketblend/rocketblend/pkg/semver"
 )
 

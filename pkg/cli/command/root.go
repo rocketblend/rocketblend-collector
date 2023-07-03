@@ -26,12 +26,12 @@ func NewCommand(srv *Service) *cobra.Command {
 and easily for use with RocketBlend.
 
 Documentation is available at https://docs.rocketblend.io/v/collector/`,
+		SilenceUsage:  true,
+		SilenceErrors: true,
 	}
 	c.SetVersionTemplate("{{.Version}}\n")
 
-	pullCmd := NewPullCommand(srv)
-
-	c.AddCommand(pullCmd)
+	c.AddCommand(NewPullCommand(srv))
 
 	return c
 }
