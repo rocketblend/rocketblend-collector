@@ -6,33 +6,32 @@ import (
 	"path/filepath"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
-	"github.com/rocketblend/rocketblend/pkg/downloader"
-	"github.com/rocketblend/rocketblend/pkg/driver/reference"
-	"github.com/rocketblend/rocketblend/pkg/driver/rocketpack"
-	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
+	"github.com/rocketblend/rocketblend/pkg/helpers"
+	"github.com/rocketblend/rocketblend/pkg/runtime"
+	"github.com/rocketblend/rocketblend/pkg/types"
 )
 
 type (
 	Collection struct {
 		store     *store.Store
+		validator types.Validator
 		library   string
 		outputDir string
 		name      string
-		addons    []reference.Reference
 		platforms []runtime.Platform
 		args      string
 	}
 )
 
-func New(library string, outputDir string, name string, addons []reference.Reference, platforms []runtime.Platform, args string, store *store.Store) *Collection {
+func New(library string, outputDir string, name string, platforms []runtime.Platform, args string, store *store.Store, validator types.Validator) *Collection {
 	return &Collection{
 		library:   library,
 		outputDir: outputDir,
 		name:      name,
-		addons:    addons,
 		args:      args,
 		platforms: platforms,
 		store:     store,
+		validator: validator,
 	}
 }
 
@@ -45,18 +44,18 @@ func (c *Collection) GetReference() string {
 }
 
 func (c *Collection) Save(path string) error {
-	builds, err := c.convert()
+	packs, err := c.convert()
 	if err != nil {
 		return err
 	}
 
-	for version, b := range builds {
-		buildPath := filepath.Join(path, c.GetRoute(), version)
-		if err := os.MkdirAll(buildPath, 0755); err != nil {
+	for version, pack := range packs {
+		path := filepath.Join(path, c.GetRoute(), version)
+		if err := os.MkdirAll(path, 0755); err != nil {
 			return err
 		}
 
-		if err := rocketpack.Save(filepath.Join(buildPath, rocketpack.FileName), b); err != nil {
+		if err := helpers.Save(c.validator, filepath.Join(path, types.PackageFileName), pack); err != nil {
 			return err
 		}
 	}
@@ -64,10 +63,10 @@ func (c *Collection) Save(path string) error {
 	return nil
 }
 
-func (c *Collection) convert() (output map[string]*rocketpack.RocketPack, err error) {
-	output = make(map[string]*rocketpack.RocketPack)
+func (c *Collection) convert() (output map[string]*types.Package, err error) {
+	output = make(map[string]*types.Package)
 	for _, b := range c.store.GetAll() {
-		sources := make(map[runtime.Platform]*rocketpack.Source)
+		sources := make([]*types.Source, 0, len(b.Sources))
 		for _, source := range b.Sources {
 			if contains(c.platforms, source.Platform) {
 				executable, err := getRuntimeExecutable(source.FileName, source.Platform)
@@ -75,26 +74,24 @@ func (c *Collection) convert() (output map[string]*rocketpack.RocketPack, err er
 					return nil, err
 				}
 
-				uri, err := downloader.NewURI(source.DownloadUrl)
+				uri, err := types.NewURI(source.DownloadUrl)
 				if err != nil {
 					return nil, err
 				}
 
-				sources[source.Platform] = &rocketpack.Source{
+				sources = append(sources, &types.Source{
 					Resource: executable,
 					URI:      uri,
-				}
+					Platform: types.Platform(source.Platform.String()),
+				})
 			}
 		}
 
 		if len(sources) > 0 {
-			output[b.Version.String()] = &rocketpack.RocketPack{
-				Build: &rocketpack.Build{
-					Version: b.Version,
-					Args:    c.args,
-					Addons:  c.addons,
-					Sources: sources,
-				},
+			output[b.Version.String()] = &types.Package{
+				Type:    types.PackageBuild,
+				Version: b.Version,
+				Sources: sources,
 			}
 		}
 	}

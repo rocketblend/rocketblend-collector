@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/rocketblend/rocketblend-collector/pkg/collection"
+	"github.com/rocketblend/rocketblend/pkg/validator"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,7 @@ build server for the current stable builds.`,
 			for _, conf := range srv.config.Collections {
 				fmt.Println("Saving '" + conf.Name + "' collection...")
 
-				c := collection.New(srv.config.Library, srv.config.OutputDir, conf.Name, conf.Addons, conf.Platforms, conf.Args, store)
+				c := collection.New(srv.config.Library, srv.config.OutputDir, conf.Name, conf.Platforms, conf.Args, store, validator.New())
 
 				if err := c.Save(wd); err != nil {
 					return err

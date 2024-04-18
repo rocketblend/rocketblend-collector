@@ -3,7 +3,7 @@ package store
 import (
 	"time"
 
-	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
+	"github.com/rocketblend/rocketblend/pkg/runtime"
 	"github.com/rocketblend/rocketblend/pkg/semver"
 )
 
