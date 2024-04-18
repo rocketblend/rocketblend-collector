@@ -8,6 +8,7 @@ import (
 	"github.com/rocketblend/rocketblend-collector/pkg/store"
 	"github.com/rocketblend/rocketblend/pkg/helpers"
 	"github.com/rocketblend/rocketblend/pkg/runtime"
+	"github.com/rocketblend/rocketblend/pkg/semver"
 	"github.com/rocketblend/rocketblend/pkg/types"
 )
 
@@ -66,9 +67,13 @@ func (c *Collection) Save(path string) error {
 func (c *Collection) convert() (output map[string]*types.Package, err error) {
 	output = make(map[string]*types.Package)
 	for _, b := range c.store.GetAll() {
-		sources := make([]*types.Source, 0, len(b.Sources))
+		sources := make([]*types.Source, 0)
+		processedPlatforms := make(map[string]bool)
+
 		for _, source := range b.Sources {
-			if contains(c.platforms, source.Platform) {
+			if contains(c.platforms, source.Platform) && !processedPlatforms[source.Platform.String()] {
+				processedPlatforms[source.Platform.String()] = true
+
 				executable, err := getRuntimeExecutable(source.FileName, source.Platform)
 				if err != nil {
 					return nil, err
@@ -89,6 +94,9 @@ func (c *Collection) convert() (output map[string]*types.Package, err error) {
 
 		if len(sources) > 0 {
 			output[b.Version.String()] = &types.Package{
+				Spec: &semver.Version{
+					Minor: 1,
+				},
 				Type:    types.PackageBuild,
 				Version: b.Version,
 				Sources: sources,

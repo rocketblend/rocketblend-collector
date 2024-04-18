@@ -56,7 +56,7 @@ func New(config *Config) *Collector {
 }
 
 func (c *Collector) CollectStable() (*store.Store, error) {
-	builds := store.New("stable")
+	builds := store.New("blender")
 
 	col := colly.NewCollector(
 		colly.AllowedDomains("download.blender.org"),
