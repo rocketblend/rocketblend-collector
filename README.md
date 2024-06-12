@@ -36,8 +36,6 @@ collections:
   - name: rocketblend
     platforms:
       - windows
-    addons:
-      - github.com/rocketblend/official-library/addons/rocketblend/0.1.0
 ```
 
 You can also use an environment variable to set the proxy url.

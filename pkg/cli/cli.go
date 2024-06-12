@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	cc "github.com/ivanpirog/coloredcobra"
-
 	"github.com/rocketblend/rocketblend-collector/pkg/cli/command"
 	"github.com/rocketblend/rocketblend-collector/pkg/cli/config"
 	"github.com/rocketblend/rocketblend-collector/pkg/collector"

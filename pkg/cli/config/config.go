@@ -6,18 +6,16 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rocketblend/rocketblend/pkg/driver/reference"
-	"github.com/rocketblend/rocketblend/pkg/driver/runtime"
+	"github.com/rocketblend/rocketblend/pkg/runtime"
 	"github.com/spf13/viper"
 )
 
 type (
 	Collection struct {
-		Name        string                `mapstructure:"name" validate:"required"`
-		Description string                `mapstructure:"description"`
-		Args        string                `mapstructure:"args"`
-		Addons      []reference.Reference `mapstructure:"addons"`
-		Platforms   []runtime.Platform    `mapstructure:"platforms" validate:"required"`
+		Name        string             `mapstructure:"name" validate:"required"`
+		Description string             `mapstructure:"description"`
+		Args        string             `mapstructure:"args"`
+		Platforms   []runtime.Platform `mapstructure:"platforms" validate:"required"`
 	}
 
 	Collector struct {
