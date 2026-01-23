@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	WindowsPlatformRegex string = "(blender-.+win.+64.+zip)"
+	WindowsPlatformRegex string = "(blender-.+(windows64|windows-x64).+zip)"
 	LinuxPlatformRegex   string = "(blender-.+lin.+64.+tar)"
 	MacPlatformRegex     string = "(blender-.+(macos|darwin).+dmg)"
 	ArmMacPlatformRegex  string = "(arm64)"
