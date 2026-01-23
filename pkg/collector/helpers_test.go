@@ -28,6 +28,17 @@ func TestParsePlatform(t *testing.T) {
 			filename: "blender-5.0.1-windows-x64.zip",
 			want:     runtime.Windows,
 		},
+		// Old Windows format (pre-v3) - should match
+		{
+			name:     "Windows v2.92.0 old format",
+			filename: "blender-2.92.0-windows64.zip",
+			want:     runtime.Windows,
+		},
+		{
+			name:     "Windows v2.83.0 old format",
+			filename: "blender-2.83.0-windows64.zip",
+			want:     runtime.Windows,
+		},
 		// Windows ARM64 - should NOT match (returns Undefined)
 		{
 			name:     "Windows ARM64 v5.0.0 zip",
